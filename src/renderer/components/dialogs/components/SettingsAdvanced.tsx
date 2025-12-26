@@ -28,7 +28,7 @@ import MapTileServerDialog from '-/components/dialogs/MapTileServerDialog';
 import { historyKeys } from '-/hooks/HistoryContextProvider';
 import { useHistoryContext } from '-/hooks/useHistoryContext';
 import { useNotificationContext } from '-/hooks/useNotificationContext';
-import { Pro } from '-/pro';
+import { WorkSpacesContext } from '-/hooks/WorkSpacesContextProvider';
 import { AppDispatch } from '-/reducers/app';
 import {
   actions as SettingsActions,
@@ -63,11 +63,8 @@ function SettingsAdvanced(props: Props) {
   const devMode = useSelector(isDevMode);
   const [tileServerDialog, setTileServerDialog] = useState<any>(undefined);
   const wsAlive = useRef<boolean>(null);
-  const workSpacesContext = Pro?.contextProviders?.WorkSpacesContext
-    ? useContext<TS.WorkSpacesContextData>(
-        Pro.contextProviders.WorkSpacesContext,
-      )
-    : undefined;
+  const workSpacesContext =
+    useContext<TS.WorkSpacesContextData>(WorkSpacesContext);
   const workSpaces = workSpacesContext?.getWorkSpaces() ?? [];
   const [ignored, forceUpdate] = useReducer((x) => x + 1, 0, undefined);
 
@@ -137,7 +134,7 @@ function SettingsAdvanced(props: Props) {
           }
         />
         <TsButton
-          disabled={!Pro}
+          disabled={false}
           onClick={(event) => editWorkSpacesClick(event)}
           startIcon={<CreateFileIcon />}
         >
@@ -163,7 +160,7 @@ function SettingsAdvanced(props: Props) {
                 aria-label={'Edit workspace'}
                 aria-haspopup="true"
                 edge="end"
-                disabled={!Pro}
+                disabled={false}
                 data-tid={'workSpaceEdit_' + workSpace.shortName}
                 onClick={(event) => editWorkSpacesClick(event, workSpace)}
               >

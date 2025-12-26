@@ -19,7 +19,6 @@ const args = process.argv.slice(2);
 })*/
 getExtensions(directoryPath, [
   '@tagspaces/extensions',
-  '@tagspacespro/extensions',
   ...(args.length > 0 ? args : []),
 ])
   .then(({ extensions, supportedFileTypes }) => {
@@ -30,19 +29,33 @@ getExtensions(directoryPath, [
     writeExtensions([], []);
   });
 
+/**
+ * Older builds expected @tagspaces/extensions to contain `common/` and `libs/` subpackages.
+ * Newer releases may not ship these folders. Keep logs quiet for OSS builds.
+ */
+try {
+  const maybeCommon = path.join(
+    directoryPath,
+    '@tagspaces',
+    'extensions',
+    'common',
+    'package.json',
+  );
+  const maybeLibs = path.join(
+    directoryPath,
+    '@tagspaces',
+    'extensions',
+    'libs',
+    'package.json',
+  );
+  // Only warn if these exist but are unreadable; otherwise stay silent.
+  if (fs.existsSync(maybeCommon)) fs.readFileSync(maybeCommon, 'utf8');
+  if (fs.existsSync(maybeLibs)) fs.readFileSync(maybeLibs, 'utf8');
+} catch {
+  // ignore
+}
+
 function writeExtensions(extensions, supportedFileTypes) {
-  /*extensions.push({
-    extensionId: '@tagspacespro/extensions/font-viewer',
-    extensionName: 'Font Viewer',
-    extensionTypes: ['viewer'],
-    extensionEnabled: true,
-    version: '1.0.90',
-  }); // tmp workarroung
-  supportedFileTypes.push({
-    type: 'ttf',
-    color: '#ac21f3',
-    viewer: '@tagspacespro/extensions/font-viewer',
-  });*/
   const generated =
     '/** GENERATED CODE - DO NOT MODIFY: This source file was generated automatically and any changes made to it may be overwritten */\n' +
     'export const extensionsFound = ' +

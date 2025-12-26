@@ -22,7 +22,7 @@ import AiGenTagsButton from '-/components/chat/AiGenTagsButton';
 import EntryTagMenu from '-/components/menus/EntryTagMenu';
 import { useCurrentLocationContext } from '-/hooks/useCurrentLocationContext';
 import { useEditedTagLibraryContext } from '-/hooks/useEditedTagLibraryContext';
-import { Pro } from '-/pro';
+import { WorkSpacesContext } from '-/hooks/WorkSpacesContextProvider';
 import {
   getTagColor,
   getTagTextColor,
@@ -65,11 +65,8 @@ function TagsSelect(props: Props) {
   const { currentLocation } = useCurrentLocationContext();
   const { tagGroups } = useEditedTagLibraryContext();
 
-  const workSpacesContext = Pro?.contextProviders?.WorkSpacesContext
-    ? useContext<TS.WorkSpacesContextData>(
-        Pro.contextProviders.WorkSpacesContext,
-      )
-    : undefined;
+  const workSpacesContext =
+    useContext<TS.WorkSpacesContextData>(WorkSpacesContext);
 
   const currentWorkSpace =
     workSpacesContext && workSpacesContext.getCurrentWorkSpace

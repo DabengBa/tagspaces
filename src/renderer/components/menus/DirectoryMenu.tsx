@@ -16,7 +16,7 @@
  *
  */
 
-import React, { useContext } from 'react';
+import React from 'react';
 import { Menu } from '@mui/material';
 import { formatDateTime4Tag } from '@tagspaces/tagspaces-common/misc';
 import AppConfig from '-/AppConfig';
@@ -27,7 +27,6 @@ import {
   normalizePath,
   generateSharingLink,
 } from '@tagspaces/tagspaces-common/paths';
-import { Pro } from '-/pro';
 import {
   createNewInstance,
   getRelativeEntryPath,
@@ -53,7 +52,6 @@ import { useCreateDirectoryDialogContext } from '-/components/dialogs/hooks/useC
 import { useProgressDialogContext } from '-/components/dialogs/hooks/useProgressDialogContext';
 import { useNewFileDialogContext } from '-/components/dialogs/hooks/useNewFileDialogContext';
 import { useNewAudioDialogContext } from '-/components/dialogs/hooks/useNewAudioDialogContext';
-import { useProTeaserDialogContext } from '-/components/dialogs/hooks/useProTeaserDialogContext';
 import { useDeleteMultipleEntriesDialogContext } from '-/components/dialogs/hooks/useDeleteMultipleEntriesDialogContext';
 import { useFileUploadContext } from '-/hooks/useFileUploadContext';
 import { TabNames } from '-/hooks/EntryPropsTabsContextProvider';
@@ -105,21 +103,12 @@ function DirectoryMenu(props: Props) {
   const { copyFilePromise, renameFilePromise } = usePlatformFacadeContext();
   const { setReflectActions } = useEditedEntryContext();
   const { openNewAudioDialog } = useNewAudioDialogContext();
-  const { openProTeaserDialog } = useProTeaserDialogContext();
   const { openImportMacTagDialog } = useImportMacTagDialogContext();
   const { openDeleteMultipleEntriesDialog } =
     useDeleteMultipleEntriesDialogContext();
 
-  const thumbDialogContext = Pro?.contextProviders?.ThumbDialogContext
-    ? useContext<TS.ThumbDialogContextData>(
-        Pro.contextProviders.ThumbDialogContext,
-      )
-    : undefined;
-  const bgndDialogContext = Pro?.contextProviders?.BgndDialogContext
-    ? useContext<TS.BgndDialogContextData>(
-        Pro.contextProviders.BgndDialogContext,
-      )
-    : undefined;
+  const thumbDialogContext = undefined;
+  const bgndDialogContext = undefined;
 
   const {
     open,
@@ -133,6 +122,7 @@ function DirectoryMenu(props: Props) {
     switchPerspectives,
   } = props;
   const directoryPath = props.directoryPath || currentDirectoryPath;
+  const Pro = undefined;
 
   function generateFolderLink(): Promise<any> {
     let locationID = undefined;
@@ -199,11 +189,11 @@ function DirectoryMenu(props: Props) {
         setManualDirectoryPerspective(perspectiveId);
       }
     } else if (perspectiveId === PerspectiveIDs.GALLERY) {
-      openProTeaserDialog(PerspectiveIDs.GALLERY);
+      // OSS build: Pro-only perspective removed.
     } else if (perspectiveId === PerspectiveIDs.MAPIQUE) {
-      openProTeaserDialog(PerspectiveIDs.MAPIQUE);
+      // OSS build: Pro-only perspective removed.
     } else if (perspectiveId === PerspectiveIDs.KANBAN) {
-      openProTeaserDialog(PerspectiveIDs.KANBAN);
+      // OSS build: Pro-only perspective removed.
     }
   }
 
@@ -381,24 +371,10 @@ function DirectoryMenu(props: Props) {
     }
   }
   function changeFolderThumbnail() {
-    if (selectedEntries.length === 1) {
-      thumbDialogContext.openThumbsDialog(selectedEntries[0]);
-    } else {
-      getAllPropertiesPromise(currentDirectoryPath).then(
-        (fsEntry: TS.FileSystemEntry) =>
-          thumbDialogContext.openThumbsDialog(fsEntry),
-      );
-    }
+    showNotification(t('core:featureNotAvailable'), 'default', true);
   }
   function changeFolderBackground() {
-    if (selectedEntries.length === 1) {
-      bgndDialogContext.openBgndDialog(selectedEntries[0]);
-    } else {
-      getAllPropertiesPromise(currentDirectoryPath).then(
-        (fsEntry: TS.FileSystemEntry) =>
-          bgndDialogContext.openBgndDialog(fsEntry),
-      );
-    }
+    showNotification(t('core:featureNotAvailable'), 'default', true);
   }
 
   const menuItems = items

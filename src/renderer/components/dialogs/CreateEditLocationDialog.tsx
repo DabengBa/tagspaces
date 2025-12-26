@@ -35,7 +35,7 @@ import { useCurrentLocationContext } from '-/hooks/useCurrentLocationContext';
 import { useLocationIndexContext } from '-/hooks/useLocationIndexContext';
 import { useNotificationContext } from '-/hooks/useNotificationContext';
 import { useTagGroupsLocationContext } from '-/hooks/useTagGroupsLocationContext';
-import { Pro } from '-/pro';
+import { WorkSpacesContext } from '-/hooks/WorkSpacesContextProvider';
 import { getPersistTagsInSidecarFile, isDevMode } from '-/reducers/settings';
 import { TS } from '-/tagspaces.namespace';
 import { CommonLocation } from '-/utils/CommonLocation';
@@ -82,6 +82,8 @@ interface Props {
   //editLocation?: (location: CommonLocation) => void;
 }
 
+const Pro = undefined;
+
 function CreateEditLocationDialog(props: Props) {
   const { t } = useTranslation();
 
@@ -98,8 +100,7 @@ function CreateEditLocationDialog(props: Props) {
   const isPersistTagsInSidecar = useSelector(getPersistTagsInSidecarFile);
   //const locations: Array<CommonLocation> = useSelector(getLocations);
   const devMode: boolean = useSelector(isDevMode);
-  const IgnorePatternDialog =
-    Pro && Pro.UI ? Pro.UI.IgnorePatternDialog : false;
+  const IgnorePatternDialog = false;
   /*const { location } = props;*/
   const [showSecretAccessKey, setShowSecretAccessKey] =
     useState<boolean>(false);
@@ -593,11 +594,8 @@ function CreateEditLocationDialog(props: Props) {
     locationTypeName = t('core:objectStorage');
   }
 
-  const workSpacesContext = Pro?.contextProviders?.WorkSpacesContext
-    ? useContext<TS.WorkSpacesContextData>(
-        Pro.contextProviders.WorkSpacesContext,
-      )
-    : undefined;
+  const workSpacesContext =
+    useContext<TS.WorkSpacesContextData>(WorkSpacesContext);
   const workSpaces = workSpacesContext?.getWorkSpaces() ?? [];
 
   const okButton = (
@@ -708,7 +706,7 @@ function CreateEditLocationDialog(props: Props) {
               )}
               {content}
               <WorkSpacesDropdown
-                disabled={!Pro}
+                disabled={false}
                 dataTid="locationWorkspaceTID"
                 workSpaceId={workSpaceId}
                 setWorkSpaceId={setWorkSpaceId}
@@ -743,7 +741,7 @@ function CreateEditLocationDialog(props: Props) {
                 style={{ justifyContent: 'space-between', marginLeft: 0 }}
                 control={
                   <Switch
-                    disabled={!Pro}
+                    disabled={false}
                     data-tid="changeFullTextIndex"
                     name="fullTextIndex"
                     checked={fullTextIndex}
@@ -771,7 +769,7 @@ function CreateEditLocationDialog(props: Props) {
                 label={
                   <>
                     {t('core:createFullTextIndex') + ' (TXT, HTML, MD, PDF)'}
-                    {Pro ? <BetaLabel /> : <ProLabel />}
+                    <BetaLabel />
                   </>
                 }
               />
@@ -843,7 +841,7 @@ function CreateEditLocationDialog(props: Props) {
                 style={{ justifyContent: 'space-between', marginLeft: 0 }}
                 control={
                   <Switch
-                    disabled={!Pro}
+                    disabled={false}
                     data-tid="changeReadOnlyMode"
                     name="isReadOnly"
                     checked={isReadOnly}
@@ -861,7 +859,7 @@ function CreateEditLocationDialog(props: Props) {
               />
               <FormControlLabel
                 disabled={
-                  !Pro ||
+                  false ||
                   type === locationType.TYPE_CLOUD ||
                   AppConfig.isCordova
                 }
@@ -880,7 +878,7 @@ function CreateEditLocationDialog(props: Props) {
                 label={
                   <>
                     {t('core:watchForChangesInLocation')}
-                    {!Pro && <ProLabel />}
+                    {null}
                   </>
                 }
               />
@@ -904,7 +902,7 @@ function CreateEditLocationDialog(props: Props) {
                 style={{ justifyContent: 'space-between', marginLeft: 0 }}
                 control={
                   <Switch
-                    disabled={!Pro}
+                    disabled={false}
                     data-tid="disableIndexingTID"
                     name="disableIndexing"
                     checked={disableIndexing}
@@ -1118,15 +1116,7 @@ function CreateEditLocationDialog(props: Props) {
                     ))}
                   </List>
                 )}
-                {IgnorePatternDialog && (
-                  <IgnorePatternDialog
-                    open={isIgnorePatternDialogOpen}
-                    onClose={() => setIgnorePatternDialogOpen(false)}
-                    ignorePatternPaths={ignorePatternPaths}
-                    setIgnorePatternPaths={setIgnorePatternPaths}
-                    location={selectedLocation}
-                  />
-                )}
+                {IgnorePatternDialog ? null : null}
               </>
               <FormControl fullWidth={true} style={{ marginTop: 10 }}>
                 <TsTextField

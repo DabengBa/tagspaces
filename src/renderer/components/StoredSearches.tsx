@@ -51,8 +51,13 @@ import React, { useContext, useReducer, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Pro } from '../pro';
+import {
+  BookmarksContext,
+  bookmarksHistoryKey,
+} from '-/hooks/BookmarksContextProvider';
 import SidePanelTitle from './SidePanelTitle';
+
+const Pro = undefined;
 
 interface Props {
   style?: any;
@@ -76,11 +81,8 @@ function StoredSearches(props: Props) {
   const { openSaveSearchDialog } = useSearchQueryContext();
   const { delAllHistory, fileOpenHistory, fileEditHistory, folderOpenHistory } =
     useHistoryContext();
-  const bookmarksContext = Pro?.contextProviders?.BookmarksContext
-    ? useContext<TS.BookmarksContextData>(
-        Pro?.contextProviders?.BookmarksContext,
-      )
-    : undefined;
+  const bookmarksContext =
+    useContext<TS.BookmarksContextData>(BookmarksContext);
   const [searchMenuAnchorEl, setSearchMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const [historyMenuAnchorEl, setHistoryMenuAnchorEl] =
@@ -97,10 +99,8 @@ function StoredSearches(props: Props) {
   const menuHistoryKey = useRef<string>(undefined);
   const [ignored, forceUpdate] = useReducer((x) => x + 1, 0, undefined);
 
-  const ExportSearchesDialog =
-    Pro && Pro.UI ? Pro.UI.ExportSearchesDialog : false;
-  const ImportSearchesDialog =
-    Pro && Pro.UI ? Pro.UI.ImportSearchesDialog : false;
+  const ExportSearchesDialog = false;
+  const ImportSearchesDialog = false;
 
   const handleSearchMenu = (event: any) => {
     setSearchMenuAnchorEl(event.currentTarget);
@@ -124,10 +124,9 @@ function StoredSearches(props: Props) {
 
   const { reduceHeightBy } = props;
 
-  const bookmarkItems: Array<TS.BookmarkItem> =
-    Pro && bookmarksContext
-      ? bookmarksContext.bookmarks //getBookmarks()
-      : [];
+  const bookmarkItems: Array<TS.BookmarkItem> = bookmarksContext
+    ? bookmarksContext.bookmarks
+    : [];
 
   const bookmarksAvailable = bookmarkItems && bookmarkItems.length > 0;
   const openedFilesAvailable = fileOpenHistory && fileOpenHistory.length > 0;
@@ -304,9 +303,9 @@ function StoredSearches(props: Props) {
             </Grid>
           )}
         </Grid>
-        {Pro && props.showBookmarks && (
+        {props.showBookmarks && (
           <RenderHistory
-            historyKey={Pro.keys.bookmarksKey}
+            historyKey={bookmarksHistoryKey}
             items={bookmarkItems}
             update={forceUpdate}
           />
@@ -472,9 +471,7 @@ function StoredSearches(props: Props) {
           onClose={() => setBookmarksMenuAnchorEl(null)}
           refresh={() => forceUpdate()}
           clearAll={() => {
-            if (Pro && bookmarksContext) {
-              bookmarksContext.delAllBookmarks();
-            }
+            bookmarksContext.delAllBookmarks();
             forceUpdate();
           }}
         />
@@ -500,21 +497,8 @@ function StoredSearches(props: Props) {
         type="file"
         onChange={handleFileInputChange}
       />
-      {ExportSearchesDialog && isExportSearchesDialogOpened && (
-        <ExportSearchesDialog
-          open={isExportSearchesDialogOpened}
-          onClose={() => setExportSearchesDialogOpened(false)}
-          searches={searches}
-        />
-      )}
-      {ImportSearchesDialog && importFile && (
-        <ImportSearchesDialog
-          open={Boolean(importFile)}
-          onClose={() => setImportFile(undefined)}
-          importFile={importFile}
-          searches={searches}
-        />
-      )}
+      {ExportSearchesDialog && isExportSearchesDialogOpened ? null : null}
+      {ImportSearchesDialog && importFile ? null : null}
     </Box>
   );
 }

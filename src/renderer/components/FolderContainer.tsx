@@ -28,14 +28,12 @@ import TsMenuList from '-/components/TsMenuList';
 import { AIProvider } from '-/components/chat/ChatTypes';
 import { adjustKeyBinding } from '-/components/dialogs/KeyboardDialog';
 import { useFileUploadDialogContext } from '-/components/dialogs/hooks/useFileUploadDialogContext';
-import { useProTeaserDialogContext } from '-/components/dialogs/hooks/useProTeaserDialogContext';
 import { TabNames } from '-/hooks/EntryPropsTabsContextProvider';
 import { useBrowserHistoryContext } from '-/hooks/useBrowserHistoryContext';
 import { useCurrentLocationContext } from '-/hooks/useCurrentLocationContext';
 import { useDirectoryContentContext } from '-/hooks/useDirectoryContentContext';
 import { useOpenedEntryContext } from '-/hooks/useOpenedEntryContext';
 import { AvailablePerspectives, PerspectiveIDs } from '-/perspectives';
-import { Pro } from '-/pro';
 import { getProgress } from '-/reducers/app';
 import {
   getDefaultAIProvider,
@@ -77,7 +75,6 @@ function FolderContainer({ toggleDrawer, drawerOpened, hidden }: Props) {
   const { findLocation } = useCurrentLocationContext();
   const { goForward, goBack, historyIndex } = useBrowserHistoryContext();
   const { openFileUploadDialog } = useFileUploadDialogContext();
-  const { openProTeaserDialog } = useProTeaserDialogContext();
   const { openEntry } = useOpenedEntryContext();
   const aiDefaultProvider: AIProvider = useSelector(getDefaultAIProvider);
   const {
@@ -210,7 +207,6 @@ function FolderContainer({ toggleDrawer, drawerOpened, hidden }: Props) {
   const switchPerspective = useCallback(
     (perspectiveId: string) => {
       if (
-        Pro ||
         perspectiveId === PerspectiveIDs.GRID ||
         perspectiveId === PerspectiveIDs.LIST
       ) {
@@ -223,10 +219,10 @@ function FolderContainer({ toggleDrawer, drawerOpened, hidden }: Props) {
           PerspectiveIDs.FOLDERVIZ,
         ].includes(perspectiveId)
       ) {
-        openProTeaserDialog(perspectiveId);
+        // OSS build: Pro-only perspective teaser removed.
       }
     },
-    [setManualDirectoryPerspective, openProTeaserDialog],
+    [setManualDirectoryPerspective],
   );
 
   const openSearchMode = useCallback(() => {

@@ -664,7 +664,7 @@ app
       ipcMain.on('load-extensions', () => {
         getExtensions(
           path.join(app.getPath('userData'), 'tsplugins'),
-          ['@tagspaces/extensions', '@tagspacespro/extensions'],
+          ['@tagspaces/extensions'],
           true,
         )
           .then(({ extensions, supportedFileTypes }) => {

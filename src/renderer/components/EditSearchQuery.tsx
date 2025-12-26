@@ -41,7 +41,7 @@ import TsTextField from '-/components/TsTextField';
 import TsToggleButton from '-/components/TsToggleButton';
 import { useLocationIndexContext } from '-/hooks/useLocationIndexContext';
 import { useSearchQueryContext } from '-/hooks/useSearchQueryContext';
-import { Pro } from '-/pro';
+import { WorkSpacesContext } from '-/hooks/WorkSpacesContextProvider';
 import { isDesktopMode } from '-/reducers/settings';
 import { TS } from '-/tagspaces.namespace';
 import { ListItemText, Stack } from '@mui/material';
@@ -71,11 +71,8 @@ function EditSearchQuery(props: Props) {
     useSearchQueryContext();
   const { isIndexing } = useLocationIndexContext();
 
-  const workSpacesContext = Pro?.contextProviders?.WorkSpacesContext
-    ? useContext<TS.WorkSpacesContextData>(
-        Pro.contextProviders.WorkSpacesContext,
-      )
-    : undefined;
+  const workSpacesContext =
+    useContext<TS.WorkSpacesContextData>(WorkSpacesContext);
   const currentWorkSpace =
     workSpacesContext && workSpacesContext.getCurrentWorkSpace
       ? workSpacesContext?.getCurrentWorkSpace()

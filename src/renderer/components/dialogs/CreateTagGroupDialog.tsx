@@ -30,7 +30,7 @@ import TsDialogActions from '-/components/dialogs/components/TsDialogActions';
 import TsDialogTitle from '-/components/dialogs/components/TsDialogTitle';
 import WorkSpacesDropdown from '-/components/dialogs/components/WorkSpacesDropdown';
 import { useCurrentLocationContext } from '-/hooks/useCurrentLocationContext';
-import { Pro } from '-/pro';
+import { WorkSpacesContext } from '-/hooks/WorkSpacesContextProvider';
 import { getSaveTagInLocation } from '-/reducers/settings';
 import { TS } from '-/tagspaces.namespace';
 import { useTheme } from '@mui/material';
@@ -85,11 +85,8 @@ function CreateTagGroupDialog(props: Props) {
   // eslint-disable-next-line no-unused-vars
   const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
 
-  const workSpacesContext = Pro?.contextProviders?.WorkSpacesContext
-    ? useContext<TS.WorkSpacesContextData>(
-        Pro.contextProviders.WorkSpacesContext,
-      )
-    : undefined;
+  const workSpacesContext =
+    useContext<TS.WorkSpacesContextData>(WorkSpacesContext);
   const workSpaces = workSpacesContext?.getWorkSpaces() ?? [];
 
   const handleTagGroupTitleChange = (
@@ -224,7 +221,7 @@ function CreateTagGroupDialog(props: Props) {
           <ListItem style={{ paddingLeft: 0, paddingRight: 0 }}>
             <TsSelect
               data-tid="tagGroupLocationTID"
-              disabled={!Pro}
+              disabled={false}
               label={
                 <>
                   {t('core:tagGroupLocation')}
@@ -260,7 +257,7 @@ function CreateTagGroupDialog(props: Props) {
         )}
         <ListItem style={{ paddingLeft: 0, paddingRight: 0 }}>
           <WorkSpacesDropdown
-            disabled={!Pro}
+            disabled={false}
             dataTid="createTgWorkspaceTID"
             workSpaceId={workSpaceId}
             setWorkSpaceId={setWorkSpaceId}

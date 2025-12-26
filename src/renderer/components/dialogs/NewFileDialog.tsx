@@ -28,7 +28,7 @@ import { useTargetPathContext } from '-/components/dialogs/hooks/useTargetPathCo
 import { useCurrentLocationContext } from '-/hooks/useCurrentLocationContext';
 import { useDirectoryContentContext } from '-/hooks/useDirectoryContentContext';
 import { useOpenedEntryContext } from '-/hooks/useOpenedEntryContext';
-import { Pro } from '-/pro';
+import { FileTemplatesContext } from '-/hooks/FileTemplatesContextProvider';
 import {
   getAuthor,
   getFileNameTagPlace,
@@ -80,11 +80,8 @@ function NewFileDialog(props: Props) {
   const prefixTagContainer: boolean = useSelector(getPrefixTagContainer);
   const filenameTagPlacedAtEnd = useSelector(getFileNameTagPlace);
   const firstRWLocation = getFirstRWLocation();
-  const fileTemplatesContext = Pro?.contextProviders?.FileTemplatesContext
-    ? useContext<TS.FileTemplatesContextData>(
-        Pro.contextProviders.FileTemplatesContext,
-      )
-    : undefined;
+  const fileTemplatesContext =
+    useContext<TS.FileTemplatesContextData>(FileTemplatesContext);
 
   const [ignored, forceUpdate] = useReducer((x) => x + 1, 0, undefined);
   const theme = useTheme();

@@ -44,7 +44,6 @@ import HelpFeedbackPanel from '-/components/HelpFeedbackPanel';
 import { ProLabel } from '-/components/HelperComponents';
 import InfoIcon from '-/components/InfoIcon';
 import LocationManager from '-/components/LocationManager';
-import ProTeaser from '-/components/ProTeaser';
 import StoredSearches from '-/components/StoredSearches';
 import TagLibrary from '-/components/TagLibrary';
 import TsButton from '-/components/TsButton';
@@ -62,7 +61,7 @@ import { useDirectoryContentContext } from '-/hooks/useDirectoryContentContext';
 import { useFileUploadContext } from '-/hooks/useFileUploadContext';
 import { usePanelsContext } from '-/hooks/usePanelsContext';
 import { useUserContext } from '-/hooks/useUserContext';
-import { Pro } from '-/pro';
+import { WorkSpacesContext } from '-/hooks/WorkSpacesContextProvider';
 import { AppDispatch } from '-/reducers/app';
 import {
   actions as SettingsActions,
@@ -120,7 +119,7 @@ function MobileNavigation(props: Props) {
   const { currentUser } = useUserContext();
   const [showTeaserBanner, setShowTeaserBanner] = useState(true);
   const [anchorUser, setAnchorUser] = useState<HTMLButtonElement | null>(null);
-  const showProTeaser = !Pro && showTeaserBanner;
+  const showProTeaser = false;
   const { hideDrawer, width } = props;
   const switchTheme = useCallback(
     () => dispatch(SettingsActions.switchTheme()),
@@ -131,11 +130,8 @@ function MobileNavigation(props: Props) {
   const anchorWSpaceRef = useRef<HTMLButtonElement>(null);
   const anchorRef = useRef<HTMLButtonElement>(null);
 
-  const workSpacesContext = Pro?.contextProviders?.WorkSpacesContext
-    ? useContext<TS.WorkSpacesContextData>(
-        Pro.contextProviders.WorkSpacesContext,
-      )
-    : undefined;
+  const workSpacesContext =
+    useContext<TS.WorkSpacesContextData>(WorkSpacesContext);
   const workSpaces: TS.WorkSpace[] = workSpacesContext?.getWorkSpaces() ?? [];
 
   const handleToggle = useCallback(
@@ -449,7 +445,7 @@ function MobileNavigation(props: Props) {
                     <MenuItem
                       key="navCreateNewAudio"
                       data-tid="navCreateNewAudioTID"
-                      disabled={!Pro}
+                      disabled={false}
                       onClick={() => {
                         openNewAudioDialog();
                         setOpenCreateMenu(false);
@@ -463,7 +459,7 @@ function MobileNavigation(props: Props) {
                         primary={
                           <>
                             {t('core:newAudioRecording')}
-                            {!Pro && <ProLabel />}
+                            {null}
                           </>
                         }
                       />
@@ -471,7 +467,7 @@ function MobileNavigation(props: Props) {
                     <MenuItem
                       key="navCreateFileFromTemplate"
                       data-tid="navCreateFileFromTemplateTID"
-                      disabled={!Pro}
+                      disabled={false}
                       onClick={() => {
                         openNewFileDialog();
                         setOpenCreateMenu(false);
@@ -485,7 +481,7 @@ function MobileNavigation(props: Props) {
                         primary={
                           <>
                             {t('core:createNewFromTemplate')}
-                            {!Pro && <ProLabel />}
+                            {null}
                           </>
                         }
                       />
@@ -600,9 +596,7 @@ function MobileNavigation(props: Props) {
           backgroundColor: theme.palette.background.default,
         }}
       >
-        {showProTeaser && (
-          <ProTeaser setShowTeaserBanner={setShowTeaserBanner} />
-        )}
+        {showProTeaser ? null : null}
         <Box
           sx={{
             display: 'flex',

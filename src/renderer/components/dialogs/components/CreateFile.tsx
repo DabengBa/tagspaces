@@ -22,7 +22,7 @@ import { SettingsTab } from '-/components/dialogs/SettingsDialog';
 import TemplatesDropDown from '-/components/dialogs/components/TemplatesDropDown';
 import { useSettingsDialogContext } from '-/components/dialogs/hooks/useSettingsDialogContext';
 import { useTargetPathContext } from '-/components/dialogs/hooks/useTargetPathContext';
-import { Pro } from '-/pro';
+import { FileTemplatesContext } from '-/hooks/FileTemplatesContextProvider';
 import { fileNameValidation } from '-/services/utils-io';
 import { TS } from '-/tagspaces.namespace';
 import useFirstRender from '-/utils/useFirstRender';
@@ -79,11 +79,8 @@ function CreateFile(props: Props) {
   const [ignored, forceUpdate] = useReducer((x) => x + 1, 0, undefined);
   const noSuitableLocation = !targetDirectoryPath;
 
-  const fileTemplatesContext = Pro?.contextProviders?.FileTemplatesContext
-    ? useContext<TS.FileTemplatesContextData>(
-        Pro.contextProviders.FileTemplatesContext,
-      )
-    : undefined;
+  const fileTemplatesContext =
+    useContext<TS.FileTemplatesContextData>(FileTemplatesContext);
   const templatesArray = fileTemplatesContext?.getTemplates();
 
   useEffect(() => {
@@ -191,7 +188,7 @@ function CreateFile(props: Props) {
               onClose();
               openSettingsDialog(SettingsTab.Templates);
             }}
-            disabled={!Pro}
+            disabled={false}
           >
             {t('manageTemplates')}
           </TsButton>

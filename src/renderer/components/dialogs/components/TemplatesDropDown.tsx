@@ -17,7 +17,7 @@
  */
 
 import TsSelect from '-/components/TsSelect';
-import { Pro } from '-/pro';
+import { FileTemplatesContext } from '-/hooks/FileTemplatesContextProvider';
 import { TS } from '-/tagspaces.namespace';
 import MenuItem from '@mui/material/MenuItem';
 import { useContext } from 'react';
@@ -32,11 +32,8 @@ interface Props {
 function TemplatesDropDown(props: Props) {
   const { fileType, label, disabled = false } = props;
   const { t } = useTranslation();
-  const fileTemplatesContext = Pro?.contextProviders?.FileTemplatesContext
-    ? useContext<TS.FileTemplatesContextData>(
-        Pro.contextProviders.FileTemplatesContext,
-      )
-    : undefined;
+  const fileTemplatesContext =
+    useContext<TS.FileTemplatesContextData>(FileTemplatesContext);
   const templatesArray = fileTemplatesContext?.getTemplates();
 
   if (fileType === 'url' || !templatesArray) {

@@ -18,7 +18,6 @@
 
 import { Pro } from '-/pro';
 import React, { createContext, useMemo, useReducer, useRef } from 'react';
-import { useProTeaserDialogContext } from '-/components/dialogs/hooks/useProTeaserDialogContext';
 import { TS } from '-/tagspaces.namespace';
 
 type AiGenerationDialogContextData = {
@@ -44,7 +43,6 @@ export type generateOptionType = 'tags' | 'summary' | 'analyseImages';
 export const AiGenerationDialogContextProvider = ({
   children,
 }: AiGenerationDialogContextProviderProps) => {
-  const { openProTeaserDialog } = useProTeaserDialogContext();
   const open = useRef<boolean>(false);
   const option = useRef<generateOptionType>(undefined);
   const selected = useRef<TS.FileSystemEntry[]>(undefined);
@@ -61,7 +59,8 @@ export const AiGenerationDialogContextProvider = ({
       selected.current = selectedEntries;
       forceUpdate();
     } else {
-      openProTeaserDialog('ai');
+      // OSS build: Pro UI removed, so dialog is unavailable.
+      // Keep this silent to avoid Pro upsell UI.
     }
   }
 

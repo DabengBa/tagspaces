@@ -36,7 +36,7 @@ import { useEditedTagLibraryContext } from '-/hooks/useEditedTagLibraryContext';
 import { useNotificationContext } from '-/hooks/useNotificationContext';
 import { useSelectedEntriesContext } from '-/hooks/useSelectedEntriesContext';
 import { useTaggingActionsContext } from '-/hooks/useTaggingActionsContext';
-import { Pro } from '-/pro';
+import { WorkSpacesContext } from '-/hooks/WorkSpacesContextProvider';
 import { AppDispatch } from '-/reducers/app';
 import {
   actions as SettingsActions,
@@ -102,11 +102,8 @@ function TagLibrary({ reduceHeightBy }: Props) {
   const [isCreateTagDialogOpened, setIsCreateTagDialogOpened] = useState(false);
   const [isEditTagDialogOpened, setIsEditTagDialogOpened] = useState(false);
 
-  const workSpacesContext = Pro?.contextProviders?.WorkSpacesContext
-    ? useContext<TS.WorkSpacesContextData>(
-        Pro.contextProviders.WorkSpacesContext,
-      )
-    : undefined;
+  const workSpacesContext =
+    useContext<TS.WorkSpacesContextData>(WorkSpacesContext);
 
   const currentWorkSpace = workSpacesContext?.getCurrentWorkSpace?.();
 

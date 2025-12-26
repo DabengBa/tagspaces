@@ -31,9 +31,7 @@
     "src/main/**/*.ts",
     "src/renderer/**/*.ts",
     "src/renderer/**/*.tsx",
-    "src/renderer/types",
-    "tagspacespro/**/*.ts",
-    "tagspacespro/**/*.tsx"
+    "src/renderer/types"
   ],
   "exclude": ["test", "release/build", "release/app/dist", ".erb/dll"]
 }

@@ -31,7 +31,7 @@ import TsTextField from '-/components/TsTextField';
 import TsToggleButton from '-/components/TsToggleButton';
 import TemplatesDropDown from '-/components/dialogs/components/TemplatesDropDown';
 import { useNotificationContext } from '-/hooks/useNotificationContext';
-import { Pro } from '-/pro';
+import { FileTemplatesContext } from '-/hooks/FileTemplatesContextProvider';
 import { TS } from '-/tagspaces.namespace';
 import CheckIcon from '@mui/icons-material/Check';
 import {
@@ -54,11 +54,8 @@ function SettingsTemplates(props: Props) {
   const editedTemplate = React.useRef<TS.FileTemplate>(undefined);
   const [ignored, forceUpdate] = React.useReducer((x) => x + 1, 0, undefined);
 
-  const fileTemplatesContext = Pro?.contextProviders?.FileTemplatesContext
-    ? useContext<TS.FileTemplatesContextData>(
-        Pro.contextProviders.FileTemplatesContext,
-      )
-    : undefined;
+  const fileTemplatesContext =
+    useContext<TS.FileTemplatesContextData>(FileTemplatesContext);
   const templatesArray = fileTemplatesContext?.getTemplates() ?? [
     AppConfig.defaultTemplate,
   ];
@@ -85,7 +82,7 @@ function SettingsTemplates(props: Props) {
       }
     } else {
       showNotification(
-        'Adding new file template is Pro feature',
+        'Adding new file template is not available',
         'default',
         true,
       );
@@ -267,7 +264,7 @@ function SettingsTemplates(props: Props) {
                 </small>
               </Typography>
               <TsIconButton
-                disabled={!Pro || !!window.ExtFileTemplates}
+                disabled={!!window.ExtFileTemplates}
                 aria-label="removeTemplate"
                 tooltip={t('core:remove')}
                 onClick={(e) => {
@@ -310,7 +307,7 @@ function SettingsTemplates(props: Props) {
             <AccordionDetails>
               <TsTextField
                 fullWidth
-                disabled={!Pro || !!window.ExtFileTemplates}
+                disabled={!!window.ExtFileTemplates}
                 label={t('name')}
                 error={!currentTemplate(template).name}
                 value={currentTemplate(template).name}
@@ -385,7 +382,7 @@ function SettingsTemplates(props: Props) {
                 fullWidth
                 multiline
                 rows={5}
-                disabled={!Pro || !!window.ExtFileTemplates}
+                disabled={!!window.ExtFileTemplates}
                 label={t('core:templateContent')}
                 value={currentTemplate(template).content}
                 onChange={(e) => {
@@ -401,7 +398,7 @@ function SettingsTemplates(props: Props) {
               />
               <TsTextField
                 fullWidth
-                disabled={!Pro || !!window.ExtFileTemplates}
+                disabled={!!window.ExtFileTemplates}
                 error={!currentTemplate(template).fileNameTmpl}
                 label={t('fileNameTmpl')}
                 placeholder="e.g.: note[{timestamp}] or {uuid}"

@@ -29,8 +29,11 @@ import {
 import TsButton from '-/components/TsButton';
 import TsIconButton from '-/components/TsIconButton';
 import { useBrowserHistoryContext } from '-/hooks/useBrowserHistoryContext';
+import {
+  BookmarksContext,
+  bookmarksHistoryKey,
+} from '-/hooks/BookmarksContextProvider';
 import { useHistoryContext } from '-/hooks/useHistoryContext';
-import { Pro } from '-/pro';
 import { dataTidFormat } from '-/services/test';
 import { createNewInstance } from '-/services/utils-io';
 import { TS } from '-/tagspaces.namespace';
@@ -67,9 +70,8 @@ function RenderHistory({
   const { t } = useTranslation();
   const { openHistoryItem } = useBrowserHistoryContext();
   const { delHistory } = useHistoryContext();
-  const bookmarksContext = Pro?.contextProviders?.BookmarksContext
-    ? useContext<TS.BookmarksContextData>(Pro.contextProviders.BookmarksContext)
-    : undefined;
+  const bookmarksContext =
+    useContext<TS.BookmarksContextData>(BookmarksContext);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedItem, setSelectedItem] = useState<
@@ -141,7 +143,7 @@ function RenderHistory({
       handleMenuClose();
       return;
     }
-    if (historyKey === Pro?.keys.bookmarksKey) {
+    if (historyKey === bookmarksHistoryKey) {
       bookmarksContext?.delBookmark(selectedItem.path);
     } else {
       delHistory(historyKey, selectedItem.creationTimeStamp);
@@ -201,7 +203,7 @@ function RenderHistory({
                   </span>
                 }
               >
-                {historyKey === Pro?.keys.bookmarksKey ? (
+                {historyKey === bookmarksHistoryKey ? (
                   <EntryBookmarkIcon />
                 ) : (
                   <HistoryIcon />

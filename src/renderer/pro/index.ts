@@ -16,22 +16,7 @@
  *
  */
 
-import AppConfig from '-/AppConfig';
+// OSS build: Pro features are removed.
+// Keep this module to avoid touching many import sites (`import { Pro } from '-/pro'`).
 
-let tsPro;
-
-try {
-  tsPro = require('node_modules/@tagspacespro/tagspacespro');
-} catch (e) {
-  if (e && e.code && e.code === 'MODULE_NOT_FOUND') {
-    console.log('PRO functionality not available');
-  } else {
-    throw e;
-  }
-}
-
-if (AppConfig.isCordovaAndroid) {
-  tsPro = undefined;
-}
-
-export { tsPro as Pro };
+export const Pro = undefined;

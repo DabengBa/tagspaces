@@ -32,7 +32,6 @@ import { MoveOrCopyFilesDialogContextProvider } from '-/components/dialogs/hooks
 import { NewAudioDialogContextProvider } from '-/components/dialogs/hooks/NewAudioDialogContextProvider';
 import { NewFileDialogContextProvider } from '-/components/dialogs/hooks/NewFileDialogContextProvider';
 import { OnboardingDialogContextProvider } from '-/components/dialogs/hooks/OnboardingDialogContextProvider';
-import { ProTeaserDialogContextProvider } from '-/components/dialogs/hooks/ProTeaserDialogContextProvider';
 import { ProgressDialogContextProvider } from '-/components/dialogs/hooks/ProgressDialogContextProvider';
 import { ResolveConflictContextProvider } from '-/components/dialogs/hooks/ResolveConflictContextProvider';
 import { SettingsDialogContextProvider } from '-/components/dialogs/hooks/SettingsDialogContextProvider';
@@ -60,19 +59,17 @@ function DialogsRoot({ children }: DialogsRootProps) {
                             <OnboardingDialogContextProvider>
                               <KeyboardDialogContextProvider>
                                 <LinkDialogContextProvider>
-                                  <ProTeaserDialogContextProvider>
-                                    <AiGenerationDialogContextProvider>
-                                      <ResolveConflictContextProvider>
-                                        <DownloadUrlContextProvider>
-                                          <ImportMacTagDialogContextProvider>
-                                            <MenuContextProvider>
-                                              {children}
-                                            </MenuContextProvider>
-                                          </ImportMacTagDialogContextProvider>
-                                        </DownloadUrlContextProvider>
-                                      </ResolveConflictContextProvider>
-                                    </AiGenerationDialogContextProvider>
-                                  </ProTeaserDialogContextProvider>
+                                  <AiGenerationDialogContextProvider>
+                                    <ResolveConflictContextProvider>
+                                      <DownloadUrlContextProvider>
+                                        <ImportMacTagDialogContextProvider>
+                                          <MenuContextProvider>
+                                            {children}
+                                          </MenuContextProvider>
+                                        </ImportMacTagDialogContextProvider>
+                                      </DownloadUrlContextProvider>
+                                    </ResolveConflictContextProvider>
+                                  </AiGenerationDialogContextProvider>
                                 </LinkDialogContextProvider>
                               </KeyboardDialogContextProvider>
                             </OnboardingDialogContextProvider>

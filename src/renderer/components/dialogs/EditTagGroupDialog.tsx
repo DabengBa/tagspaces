@@ -30,7 +30,7 @@ import WorkSpacesDropdown from '-/components/dialogs/components/WorkSpacesDropdo
 import { useCurrentLocationContext } from '-/hooks/useCurrentLocationContext';
 import { useTagGroupsLocationContext } from '-/hooks/useTagGroupsLocationContext';
 import { useTaggingActionsContext } from '-/hooks/useTaggingActionsContext';
-import { Pro } from '-/pro';
+import { WorkSpacesContext } from '-/hooks/WorkSpacesContextProvider';
 import { getSaveTagInLocation } from '-/reducers/settings';
 import { TS } from '-/tagspaces.namespace';
 import { CommonLocation } from '-/utils/CommonLocation';
@@ -54,6 +54,8 @@ interface Props {
   selectedTagGroupEntry: TS.TagGroup;
   onClose: () => void;
 }
+
+const Pro = undefined;
 
 function EditTagGroupDialog(props: Props) {
   const { selectedTagGroupEntry, open, onClose } = props;
@@ -80,11 +82,8 @@ function EditTagGroupDialog(props: Props) {
   );
   const theme = useTheme();
   const smallScreen = useMediaQuery(theme.breakpoints.down('md'));
-  const workSpacesContext = Pro?.contextProviders?.WorkSpacesContext
-    ? useContext<TS.WorkSpacesContextData>(
-        Pro.contextProviders.WorkSpacesContext,
-      )
-    : undefined;
+  const workSpacesContext =
+    useContext<TS.WorkSpacesContextData>(WorkSpacesContext);
   const workSpaces = workSpacesContext?.getWorkSpaces() ?? [];
 
   useEffect(() => {
@@ -212,7 +211,7 @@ function EditTagGroupDialog(props: Props) {
         <ListItem style={{ paddingLeft: 0, paddingRight: 0 }}>
           <TsSelect
             fullWidth
-            disabled={!Pro}
+            disabled={false}
             label={
               <>
                 {t('core:tagGroupLocation')}
@@ -243,7 +242,7 @@ function EditTagGroupDialog(props: Props) {
       )}
       <ListItem style={{ paddingLeft: 0, paddingRight: 0 }}>
         <WorkSpacesDropdown
-          disabled={!Pro}
+          disabled={false}
           dataTid="taggroupWorkspaceTID"
           workSpaceId={workSpaceId}
           setWorkSpaceId={setWorkSpaceId}

@@ -18,7 +18,6 @@
 
 import {
   AboutIcon,
-  CancelSubscriptionIcon,
   ChangeLogIcon,
   EmailIcon,
   ForumIcon,
@@ -28,7 +27,6 @@ import {
   MastodonIcon,
   NewFeatureIcon,
   OnboardingIcon,
-  ProTeaserIcon,
   TranslationIcon,
   WebClipperIcon,
   XIcon,
@@ -36,8 +34,6 @@ import {
 import { useAboutDialogContext } from '-/components/dialogs/hooks/useAboutDialogContext';
 import { useKeyboardDialogContext } from '-/components/dialogs/hooks/useKeyboardDialogContext';
 import { useOnboardingDialogContext } from '-/components/dialogs/hooks/useOnboardingDialogContext';
-import { useProTeaserDialogContext } from '-/components/dialogs/hooks/useProTeaserDialogContext';
-import { Pro } from '-/pro';
 import { isDesktopMode } from '-/reducers/settings';
 import { openURLExternally } from '-/services/utils-io';
 import { Box, ListItemText } from '@mui/material';
@@ -64,7 +60,6 @@ function HelpFeedbackPanel(props: Props) {
   const { openAboutDialog } = useAboutDialogContext();
   const { openOnboardingDialog } = useOnboardingDialogContext();
   const { openKeyboardDialog } = useKeyboardDialogContext();
-  const { openProTeaserDialog } = useProTeaserDialogContext();
   const { reduceHeightBy } = props;
 
   return (
@@ -199,20 +194,6 @@ function HelpFeedbackPanel(props: Props) {
             <ListItemText>{t('core:emailContact')}</ListItemText>
           </ListItemButton>
         </ListItem>
-        {Pro && (
-          <ListItem disablePadding>
-            <ListItemButton
-              onClick={() =>
-                openURLExternally(Links.links.cancelSubscription, true)
-              }
-            >
-              <ListItemIcon>
-                <CancelSubscriptionIcon />
-              </ListItemIcon>
-              <ListItemText>{t('core:cancelSubscription')}</ListItemText>
-            </ListItemButton>
-          </ListItem>
-        )}
         <ListItem disablePadding>
           <ListItemButton
             onClick={() => openURLExternally(Links.links.mastodon, true)}
@@ -231,15 +212,6 @@ function HelpFeedbackPanel(props: Props) {
               <XIcon />
             </ListItemIcon>
             <ListItemText>{t('core:followOnX')}</ListItemText>
-          </ListItemButton>
-        </ListItem>
-        <Divider />
-        <ListItem disablePadding>
-          <ListItemButton onClick={() => openProTeaserDialog()}>
-            <ListItemIcon>
-              <ProTeaserIcon />
-            </ListItemIcon>
-            <ListItemText>{t('achieveMore') + ' TagSpaces Pro'}</ListItemText>
           </ListItemButton>
         </ListItem>
       </List>

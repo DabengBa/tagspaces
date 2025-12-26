@@ -21,7 +21,7 @@ import { useCreateEditLocationDialogContext } from '-/components/dialogs/hooks/u
 import LocationContextMenu from '-/components/menus/LocationContextMenu';
 import LocationManagerMenu from '-/components/menus/LocationManagerMenu';
 import { useCurrentLocationContext } from '-/hooks/useCurrentLocationContext';
-import { Pro } from '-/pro';
+import { WorkSpacesContext } from '-/hooks/WorkSpacesContextProvider';
 import { getLocations } from '-/reducers/locations';
 import { TS } from '-/tagspaces.namespace';
 import { Box, List } from '@mui/material';
@@ -52,17 +52,12 @@ function LocationManager(props: Props) {
     useState<boolean>(false);
   const [importFile, setImportFile] = useState<File>(undefined);
 
-  const ExportLocationsDialog =
-    Pro && Pro.UI ? Pro.UI.ExportLocationsDialog : false;
+  const ExportLocationsDialog = false;
 
-  const ImportLocationsDialog =
-    Pro && Pro.UI ? Pro.UI.ImportLocationsDialog : false;
+  const ImportLocationsDialog = false;
 
-  const workSpacesContext = Pro?.contextProviders?.WorkSpacesContext
-    ? useContext<TS.WorkSpacesContextData>(
-        Pro.contextProviders.WorkSpacesContext,
-      )
-    : undefined;
+  const workSpacesContext =
+    useContext<TS.WorkSpacesContextData>(WorkSpacesContext);
 
   const currentWorkSpace =
     workSpacesContext && workSpacesContext.getCurrentWorkSpace
@@ -211,19 +206,8 @@ function LocationManager(props: Props) {
         type="file"
         onChange={handleFileInputChange}
       />
-      {ExportLocationsDialog && isExportLocationsDialogOpened && (
-        <ExportLocationsDialog
-          open={isExportLocationsDialogOpened}
-          onClose={() => setExportLocationsDialogOpened(false)}
-        />
-      )}
-      {ImportLocationsDialog && importFile && (
-        <ImportLocationsDialog
-          open={Boolean(importFile)}
-          onClose={() => setImportFile(undefined)}
-          importFile={importFile}
-        />
-      )}
+      {ExportLocationsDialog && isExportLocationsDialogOpened ? null : null}
+      {ImportLocationsDialog && importFile ? null : null}
     </Box>
   );
 }

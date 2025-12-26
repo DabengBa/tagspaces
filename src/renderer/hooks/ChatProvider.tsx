@@ -43,7 +43,7 @@ import { useOpenedEntryContext } from '-/hooks/useOpenedEntryContext';
 import { usePlatformFacadeContext } from '-/hooks/usePlatformFacadeContext';
 import { useSelectedEntriesContext } from '-/hooks/useSelectedEntriesContext';
 import { useTaggingActionsContext } from '-/hooks/useTaggingActionsContext';
-import { Pro } from '-/pro';
+import { AiTemplatesContext } from '-/hooks/AiTemplatesContextProvider';
 import { actions as AppActions, AppDispatch } from '-/reducers/app';
 import {
   actions as SettingsActions,
@@ -227,11 +227,8 @@ export const ChatContextProvider = ({ children }: ChatContextProviderProps) => {
   //const defaultAiProviderId: string = useSelector(getDefaultAIProviderId);
   //const aiProviders: AIProvider[] = useSelector(getAIProviders);getDefaultAIProvider(defaultAiProviderId,aiProviders);
   const chatHistoryItems = useRef<ChatItem[]>([]);
-  const aiTemplatesContext = Pro?.contextProviders?.AiTemplatesContext
-    ? useContext<TS.AiTemplatesContextData>(
-        Pro.contextProviders.AiTemplatesContext,
-      )
-    : undefined;
+  const aiTemplatesContext =
+    useContext<TS.AiTemplatesContextData>(AiTemplatesContext);
   const isTyping = useRef<boolean>(false);
   //const timelineItems = useRef<TimelineItem[]>([]);
   const ollamaClient = useRef<Ollama>(undefined);
@@ -292,9 +289,7 @@ export const ChatContextProvider = ({ children }: ChatContextProviderProps) => {
   function getGenerationSettings(
     option: generateOptionType = 'tags',
   ): GenerationSettings {
-    const item = Pro
-      ? localStorage.getItem(Pro.keys.generationSettingsKey)
-      : undefined;
+    const item = localStorage.getItem('TS_AI_GENERATION_SETTINGS_V1');
     const storedObj = item ? JSON.parse(item) : {};
     return {
       option: option,

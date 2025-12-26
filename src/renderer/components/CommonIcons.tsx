@@ -289,8 +289,6 @@ export { default as CancelSubscriptionIcon } from '@mui/icons-material/EventBusy
 
 export { default as OnboardingIcon } from '@mui/icons-material/ExploreOutlined';
 
-export { default as ProTeaserIcon } from '@mui/icons-material/FlightTakeoff';
-
 export { default as ForumIcon } from '@mui/icons-material/ForumOutlined';
 
 export { default as NewFeatureIcon } from '@mui/icons-material/GestureOutlined';

@@ -32,7 +32,7 @@ import TsMenuList from '-/components/TsMenuList';
 import { useLinkDialogContext } from '-/components/dialogs/hooks/useLinkDialogContext';
 import { useCurrentLocationContext } from '-/hooks/useCurrentLocationContext';
 import { useLocationIndexContext } from '-/hooks/useLocationIndexContext';
-import { Pro } from '-/pro';
+import { WorkSpacesContext } from '-/hooks/WorkSpacesContextProvider';
 import { openURLExternally } from '-/services/utils-io';
 import { Divider } from '@mui/material';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -60,11 +60,8 @@ function LocationManagerMenu(props: Props) {
   //const { openLinkDialog } = useLinkDialogContext();
   const [locationManagerMenuAnchorEl, setLocationManagerMenuAnchorEl] =
     useState<null | HTMLElement>(null);
-  const workSpacesContext = Pro?.contextProviders?.WorkSpacesContext
-    ? useContext<TS.WorkSpacesContextData>(
-        Pro.contextProviders.WorkSpacesContext,
-      )
-    : undefined;
+  const workSpacesContext =
+    useContext<TS.WorkSpacesContextData>(WorkSpacesContext);
 
   const currentWorkSpace =
     workSpacesContext && workSpacesContext.getCurrentWorkSpace
@@ -94,7 +91,7 @@ function LocationManagerMenu(props: Props) {
   // https://trello.com/c/z6ESlqxz/697-exports-to-json-or-csv-do-not-work-on-android
   menuItems.push(
     <MenuItem
-      disabled={!Pro}
+      disabled={false}
       key="locationManagerMenuExportLocationsTID"
       data-tid="locationManagerMenuExportLocationsTID"
       onClick={() => {
@@ -118,7 +115,7 @@ function LocationManagerMenu(props: Props) {
   if (!AppConfig.locationsReadOnly) {
     menuItems.push(
       <MenuItem
-        disabled={!Pro}
+        disabled={false}
         key="locationManagerMenuImportLocations"
         data-tid="locationManagerMenuImportLocationsTID"
         onClick={() => {

@@ -33,7 +33,7 @@ import TsTextField from '-/components/TsTextField';
 import { AIProvider, AIProviders } from '-/components/chat/ChatTypes';
 import SelectChatModel from '-/components/chat/SelectChatModel';
 import { useChatContext } from '-/hooks/useChatContext';
-import { Pro } from '-/pro';
+import { AiTemplatesContext } from '-/hooks/AiTemplatesContextProvider';
 import { AppDispatch } from '-/reducers/app';
 import {
   actions as SettingsActions,
@@ -86,11 +86,8 @@ function SettingsAI(props: Props) {
   const aiTemplates = React.useRef({});
   const [openedNewAIMenu, setOpenedNewAIMenu] = React.useState(false);
 
-  const aiTemplatesContext = Pro?.contextProviders?.AiTemplatesContext
-    ? useContext<TS.AiTemplatesContextData>(
-        Pro.contextProviders.AiTemplatesContext,
-      )
-    : undefined;
+  const aiTemplatesContext =
+    useContext<TS.AiTemplatesContextData>(AiTemplatesContext);
 
   useEffect(() => {
     checkOllamaAlive();
@@ -524,7 +521,7 @@ function SettingsAI(props: Props) {
           </AccordionDetails>
         </Accordion>
       ))}
-      {Pro && aiTemplatesContext && (
+      {aiTemplatesContext && (
         <Accordion>
           <AccordionSummary
             expandIcon={<ExpandIcon />}

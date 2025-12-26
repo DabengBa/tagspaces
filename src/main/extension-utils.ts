@@ -4,7 +4,7 @@ import { Extensions } from './types';
 /**
  * todo move in common-node
  * @param nodeModulesPath
- * @param packages: [@tagspaces/extensions, @tagspacespro/extensions]
+ * @param packages: [@tagspaces/extensions]
  * @param isExternal
  * @returns {Promise<{ extensions, supportedFileTypes }>}
  */
@@ -148,8 +148,13 @@ function processDirs(
         };
       }
     } catch (ex) {
+      // OSS build: keep logs quiet when optional extension folders are missing
+      // (e.g. `common/` or `libs/` shipped as assets, not npm subpackages).
+      if (ex && ex.code === 'ENOENT') {
+        return undefined;
+      }
       console.debug(
-        'generateExtensionsConfig: ' + dir.name + ' error:' + ex.message,
+        `generateExtensionsConfig: ${dir.name} error:${ex.message}`,
       );
     }
     return undefined;

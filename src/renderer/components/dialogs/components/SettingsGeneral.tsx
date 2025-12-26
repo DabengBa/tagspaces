@@ -31,7 +31,7 @@ import ColorPickerDialog from '-/components/dialogs/ColorPickerDialog';
 import { useDirectoryContentContext } from '-/hooks/useDirectoryContentContext';
 import { useNotificationContext } from '-/hooks/useNotificationContext';
 import { PerspectiveIDs } from '-/perspectives';
-import { Pro } from '-/pro';
+import { WorkSpacesContext } from '-/hooks/WorkSpacesContextProvider';
 import { AppDispatch } from '-/reducers/app';
 import {
   actions as SettingsActions,
@@ -86,11 +86,8 @@ function SettingsGeneral() {
   const devMode = useSelector(isDevMode);
   const [tileServerDialog, setTileServerDialog] = useState<any>(undefined);
   const wsAlive = useRef<boolean>(null);
-  const workSpacesContext = Pro?.contextProviders?.WorkSpacesContext
-    ? useContext<TS.WorkSpacesContextData>(
-        Pro.contextProviders.WorkSpacesContext,
-      )
-    : undefined;
+  const workSpacesContext =
+    useContext<TS.WorkSpacesContextData>(WorkSpacesContext);
   const [ignored, forceUpdate] = useReducer((x) => x + 1, 0, undefined);
 
   useEffect(() => {
@@ -894,7 +891,7 @@ function SettingsGeneral() {
               />
               <Switch
                 data-tid="setRevisionsEnabledTID"
-                disabled={!Pro}
+                disabled={false}
                 onClick={() =>
                   setRevisionsEnabled(!settings.isRevisionsEnabled)
                 }
@@ -924,9 +921,9 @@ function SettingsGeneral() {
               />
               <Switch
                 data-tid="saveTagInLocationTID"
-                disabled={!Pro || window.ExtUseLocationTags !== undefined}
+                disabled={!!window.ExtUseLocationTags}
                 onClick={() => {
-                  Pro && setSaveTagInLocation(!settings.saveTagInLocation);
+                  setSaveTagInLocation(!settings.saveTagInLocation);
                 }}
                 checked={
                   window.ExtUseLocationTags !== undefined

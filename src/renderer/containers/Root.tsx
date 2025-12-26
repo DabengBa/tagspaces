@@ -35,6 +35,10 @@ import { FileUploadContextProvider } from '-/hooks/FileUploadContextProvider';
 import { HistoryContextProvider } from '-/hooks/HistoryContextProvider';
 import { IOActionsContextProvider } from '-/hooks/IOActionsContextProvider';
 import { LocationIndexContextProvider } from '-/hooks/LocationIndexContextProvider';
+import { BookmarksContextProvider } from '-/hooks/BookmarksContextProvider';
+import { AiTemplatesContextProvider } from '-/hooks/AiTemplatesContextProvider';
+import { FileTemplatesContextProvider } from '-/hooks/FileTemplatesContextProvider';
+import { WorkSpacesContextProvider } from '-/hooks/WorkSpacesContextProvider';
 import { NotificationContextProvider } from '-/hooks/NotificationContextProvider';
 import { OpenedEntryContextProvider } from '-/hooks/OpenedEntryContextProvider';
 import { PanelsContextProvider } from '-/hooks/PanelsContextProvider';
@@ -46,7 +50,6 @@ import { SelectedEntryContextProvider } from '-/hooks/SelectedEntryContextProvid
 import { TagGroupsLocationContextProvider } from '-/hooks/TagGroupsLocationContextProvider';
 import { TaggingActionsContextProvider } from '-/hooks/TaggingActionsContextProvider';
 import { UserContextProvider } from '-/hooks/UserContextProvider';
-import { Pro } from '-/pro';
 import i18nInit from '-/services/i18nInit';
 import React, { useEffect, useMemo, useState } from 'react';
 import { DndProvider } from 'react-dnd';
@@ -78,29 +81,6 @@ const DndWrapper: React.FC<{ children?: React.ReactNode }> = ({ children }) => (
   <DndProvider backend={HTML5Backend}>{children}</DndProvider>
 );
 
-/* The stack of Pro-only feature providers (WorkSpaces removed from here). */
-const ProFeatureStack: React.FC = () => (
-  <Pro.contextProviders.BookmarksContextProvider>
-    <Pro.contextProviders.KanBanImportDialogContextProvider>
-      <Pro.contextProviders.ThumbDialogContextProvider>
-        <Pro.contextProviders.BgndDialogContextProvider>
-          <Pro.contextProviders.AiTemplatesContextProvider>
-            <Pro.contextProviders.FileTemplatesContextProvider>
-              <Pro.contextProviders.WorkSpacesContextProvider>
-                <ChatContextProvider>
-                  <DialogsRoot>
-                    <MainPage />
-                  </DialogsRoot>
-                </ChatContextProvider>
-              </Pro.contextProviders.WorkSpacesContextProvider>
-            </Pro.contextProviders.FileTemplatesContextProvider>
-          </Pro.contextProviders.AiTemplatesContextProvider>
-        </Pro.contextProviders.BgndDialogContextProvider>
-      </Pro.contextProviders.ThumbDialogContextProvider>
-    </Pro.contextProviders.KanBanImportDialogContextProvider>
-  </Pro.contextProviders.BookmarksContextProvider>
-);
-
 /* Non-pro fallback content */
 const NonProInner: React.FC = () => (
   <ChatContextProvider>
@@ -128,6 +108,10 @@ const SHARED_PROVIDERS = [
   TagGroupsLocationContextProvider,
   EditedTagLibraryContextProvider,
   TaggingActionsContextProvider,
+  BookmarksContextProvider,
+  WorkSpacesContextProvider,
+  AiTemplatesContextProvider,
+  FileTemplatesContextProvider,
   DndWrapper, // wrapper that passes backend prop
   ExtensionsContextProvider,
   PanelsContextProvider,
@@ -166,8 +150,7 @@ export default function Root({ store, persistor }: RootType) {
    * If `Pro` can change at runtime, include it in deps: [Pro] (but usually it's static).
    */
   const appInner = useMemo(() => {
-    const inner = Pro ? <ProFeatureStack /> : <NonProInner />;
-    return composeProviders(SHARED_PROVIDERS, inner);
+    return composeProviders(SHARED_PROVIDERS, <NonProInner />);
   }, []); // keep empty if Pro is static; add [Pro] if Pro can change during runtime
 
   if (!initialized) {

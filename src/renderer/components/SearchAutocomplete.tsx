@@ -44,7 +44,7 @@ import { useLocationIndexContext } from '-/hooks/useLocationIndexContext';
 import { useOpenedEntryContext } from '-/hooks/useOpenedEntryContext';
 import { useSavedSearchesContext } from '-/hooks/useSavedSearchesContext';
 import { useSearchQueryContext } from '-/hooks/useSearchQueryContext';
-import { Pro } from '-/pro';
+import { BookmarksContext } from '-/hooks/BookmarksContextProvider';
 import {
   getMaxSearchResults,
   getShowUnixHiddenEntries,
@@ -73,6 +73,8 @@ import React, {
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions as AppActions, AppDispatch } from '../reducers/app';
+
+const Pro = undefined;
 
 interface Props {
   style?: any;
@@ -104,9 +106,8 @@ function SearchAutocomplete(props: Props) {
   const { fileOpenHistory, fileEditHistory, folderOpenHistory, searchHistory } =
     useHistoryContext();
 
-  const bookmarksContext = Pro?.contextProviders?.BookmarksContext
-    ? useContext<TS.BookmarksContextData>(Pro.contextProviders.BookmarksContext)
-    : undefined;
+  const bookmarksContext =
+    useContext<TS.BookmarksContextData>(BookmarksContext);
   const dispatch: AppDispatch = useDispatch();
   const maxSearchResults = useSelector(getMaxSearchResults);
   const showUnixHiddenEntries = useSelector(getShowUnixHiddenEntries);
@@ -158,11 +159,7 @@ function SearchAutocomplete(props: Props) {
 
   // const mainSearchField = useRef<HTMLInputElement>(null);
   const isOpen = useRef<boolean>(true);
-  const workSpacesContext = Pro?.contextProviders?.WorkSpacesContext
-    ? useContext<TS.WorkSpacesContextData>(
-        Pro.contextProviders.WorkSpacesContext,
-      )
-    : undefined;
+  const workSpacesContext = undefined;
 
   const currentWorkSpace =
     workSpacesContext && workSpacesContext.getCurrentWorkSpace
@@ -623,8 +620,7 @@ function SearchAutocomplete(props: Props) {
     } else if (isAction(action, SearchActions.BOOK)) {
       if (currentOptions.current !== action) {
         currentOptions.current = action;
-        const bookmarks: Array<TS.BookmarkItem> =
-          Pro && bookmarksContext && bookmarksContext.bookmarks; //getBookmarks();
+        const bookmarks: Array<TS.BookmarkItem> = bookmarksContext?.bookmarks;
 
         function getOptions(
           items: TS.BookmarkItem[],
@@ -961,15 +957,13 @@ function SearchAutocomplete(props: Props) {
           isOpen.current = false;
           return [];
         } else if (option.action === ExecActions.OPEN_BOOKMARK) {
-          if (Pro) {
-            const item: TS.HistoryItem = {
-              path: option.label,
-              url: option.fullName,
-              lid: undefined,
-              creationTimeStamp: 0,
-            };
-            openHistoryItem(item);
-          }
+          const item: TS.HistoryItem = {
+            path: option.label,
+            url: option.fullName,
+            lid: undefined,
+            creationTimeStamp: 0,
+          };
+          openHistoryItem(item);
           searchOptions.current = getSearchOptions();
           currentOptions.current = undefined;
           isOpen.current = false;

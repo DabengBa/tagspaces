@@ -26,7 +26,7 @@ import DragItemTypes from '-/components/DragItemTypes';
 import TooltipTS from '-/components/Tooltip';
 import TsIconButton from '-/components/TsIconButton';
 import { useCurrentLocationContext } from '-/hooks/useCurrentLocationContext';
-import { Pro } from '-/pro';
+import { WorkSpacesContext } from '-/hooks/WorkSpacesContextProvider';
 import { TS } from '-/tagspaces.namespace';
 import { CommonLocation } from '-/utils/CommonLocation';
 import { Box, useTheme } from '@mui/material';
@@ -63,11 +63,8 @@ function TagGroupTitleDnD(props: Props) {
   const tagGroupRef = useRef<HTMLSpanElement>(null);
   const theme = useTheme();
   const { t } = useTranslation();
-  const workSpacesContext = Pro?.contextProviders?.WorkSpacesContext
-    ? useContext<TS.WorkSpacesContextData>(
-        Pro.contextProviders.WorkSpacesContext,
-      )
-    : undefined;
+  const workSpacesContext =
+    useContext<TS.WorkSpacesContextData>(WorkSpacesContext);
 
   // Determine expanded state from tagGroupCollapsed prop
   const expanded = !(

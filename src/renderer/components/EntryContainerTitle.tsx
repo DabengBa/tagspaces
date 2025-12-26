@@ -34,7 +34,7 @@ import TsIconButton from '-/components/TsIconButton';
 import { useCurrentLocationContext } from '-/hooks/useCurrentLocationContext';
 import { useNotificationContext } from '-/hooks/useNotificationContext';
 import { useOpenedEntryContext } from '-/hooks/useOpenedEntryContext';
-import { Pro } from '-/pro';
+import { BookmarksContext } from '-/hooks/BookmarksContextProvider';
 import { getSupportedFileTypes, getTagDelimiter } from '-/reducers/settings';
 import { dataTidFormat } from '-/services/test';
 import { findColorForEntry, getAllTags } from '-/services/utils-io';
@@ -83,25 +83,17 @@ function EntryContainerTitle(props: Props) {
     openedEntry,
     supportedFileTypes,
   );
-  const bookmarksContext = Pro?.contextProviders?.BookmarksContext
-    ? useContext<TS.BookmarksContextData>(Pro.contextProviders.BookmarksContext)
-    : undefined;
+  const bookmarksContext =
+    useContext<TS.BookmarksContextData>(BookmarksContext);
 
   const bookmarkClick = () => {
-    if (Pro && bookmarksContext) {
-      if (bookmarksContext.haveBookmark(openedEntry.path)) {
-        bookmarksContext.delBookmark(openedEntry.path);
-      } else {
-        bookmarksContext.setBookmark(openedEntry.path, sharingLink);
-      }
-      forceUpdate();
+    if (!bookmarksContext || !openedEntry?.path) return;
+    if (bookmarksContext.haveBookmark(openedEntry.path)) {
+      bookmarksContext.delBookmark(openedEntry.path);
     } else {
-      showNotification(
-        t('core:toggleBookmark') +
-          ' - ' +
-          t('thisFunctionalityIsAvailableInPro'),
-      );
+      bookmarksContext.setBookmark(openedEntry.path, sharingLink);
     }
+    forceUpdate();
   };
 
   const currentLocation = findLocation(openedEntry.locationID);
