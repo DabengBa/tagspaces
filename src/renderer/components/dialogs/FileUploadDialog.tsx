@@ -72,12 +72,15 @@ function FileUploadDialog(props: Props) {
 
   useEffect(() => {
     if (AppConfig.isElectron) {
-      window.electronIO.ipcRenderer.on('progress', (fileName, newProgress) => {
-        dispatch(AppActions.onUploadProgress(newProgress, undefined));
-      });
+      const unsubscribe = window.electronIO.ipcRenderer.on(
+        'progress',
+        (fileName, newProgress) => {
+          dispatch(AppActions.onUploadProgress(newProgress, undefined));
+        },
+      );
 
       return () => {
-        window.electronIO.ipcRenderer.removeAllListeners('progress');
+        unsubscribe();
       };
     }
   }, []);

@@ -57,18 +57,23 @@ export const NewFileDialogContextProvider = ({
 
   useEffect(() => {
     if (AppConfig.isElectron) {
-      window.electronIO.ipcRenderer.on('new-text-file', () => {
-        openDialog();
-      });
+      const unsubscribeTxt = window.electronIO.ipcRenderer.on(
+        'new-text-file',
+        () => {
+          openDialog();
+        },
+      );
 
-      window.electronIO.ipcRenderer.on('new-md-file', () => {
-        openDialog('md');
-      });
+      const unsubscribeMd = window.electronIO.ipcRenderer.on(
+        'new-md-file',
+        () => {
+          openDialog('md');
+        },
+      );
 
       return () => {
-        if (window.electronIO.ipcRenderer) {
-          window.electronIO.ipcRenderer.removeAllListeners('new-text-file');
-        }
+        unsubscribeTxt();
+        unsubscribeMd();
       };
     }
   }, []);

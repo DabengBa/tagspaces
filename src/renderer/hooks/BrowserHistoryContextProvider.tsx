@@ -47,7 +47,7 @@ export const BrowserHistoryContextProvider = ({
 
   useEffect(() => {
     if (AppConfig.isElectron) {
-      window.electronIO.ipcRenderer.on('history', (arg) => {
+      const unsubscribe = window.electronIO.ipcRenderer.on('history', (arg) => {
         if (arg === 'go-back') {
           goBack();
         } else if (arg === 'go-forward') {
@@ -56,9 +56,7 @@ export const BrowserHistoryContextProvider = ({
       });
 
       return () => {
-        if (window.electronIO.ipcRenderer) {
-          window.electronIO.ipcRenderer.removeAllListeners('history');
-        }
+        unsubscribe();
       };
     }
   }, []);

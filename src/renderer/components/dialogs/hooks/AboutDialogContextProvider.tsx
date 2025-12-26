@@ -53,16 +53,15 @@ export const AboutDialogContextProvider = ({
 
   useEffect(() => {
     if (AppConfig.isElectron) {
-      window.electronIO.ipcRenderer.on('toggle-about-dialog', () => {
-        openDialog();
-      });
+      const unsubscribe = window.electronIO.ipcRenderer.on(
+        'toggle-about-dialog',
+        () => {
+          openDialog();
+        },
+      );
 
       return () => {
-        if (window.electronIO.ipcRenderer) {
-          window.electronIO.ipcRenderer.removeAllListeners(
-            'toggle-about-dialog',
-          );
-        }
+        unsubscribe();
       };
     }
   }, []);

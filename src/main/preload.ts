@@ -107,7 +107,7 @@ const electronHandler = {
     getSync(command: Channels, ...args: unknown[]) {
       return ipcRenderer.sendSync(command, ...args);
     },
-    removeAllListeners(channel: string) {
+    removeAllListeners(channel: Channels) {
       ipcRenderer.removeAllListeners(channel);
     },
     startDrag: (fileName) => ipcRenderer.send('ondragstart', fileName),

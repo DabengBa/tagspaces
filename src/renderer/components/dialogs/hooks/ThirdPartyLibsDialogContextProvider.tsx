@@ -57,7 +57,7 @@ export const ThirdPartyLibsDialogContextProvider = ({
 
   useEffect(() => {
     if (AppConfig.isElectron) {
-      window.electronIO.ipcRenderer.on(
+      const unsubscribe = window.electronIO.ipcRenderer.on(
         'toggle-third-party-libs-dialog',
         (arg) => {
           openDialog();
@@ -65,11 +65,7 @@ export const ThirdPartyLibsDialogContextProvider = ({
       );
 
       return () => {
-        if (window.electronIO.ipcRenderer) {
-          window.electronIO.ipcRenderer.removeAllListeners(
-            'toggle-third-party-libs-dialog',
-          );
-        }
+        unsubscribe();
       };
     }
   }, []);

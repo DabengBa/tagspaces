@@ -55,17 +55,15 @@ function FileView(props: Props) {
   const eventID = useRef<string>(getUuid());
 
   useEffect(() => {
+    let unsubscribePlayPause: undefined | (() => void);
     if (AppConfig.isElectron) {
-      window.electronIO.ipcRenderer.on('play-pause', () => {
-        // @ts-ignore
-        fileViewer?.current?.contentWindow?.togglePlay();
-      });
-
-      return () => {
-        if (window.electronIO.ipcRenderer) {
-          window.electronIO.ipcRenderer.removeAllListeners('play-pause');
-        }
-      };
+      unsubscribePlayPause = window.electronIO.ipcRenderer.on(
+        'play-pause',
+        () => {
+          // @ts-ignore
+          fileViewer?.current?.contentWindow?.togglePlay();
+        },
+      );
     }
     if (fscreen.fullscreenEnabled) {
       fscreen.addEventListener(
@@ -77,9 +75,7 @@ function FileView(props: Props) {
     }
 
     return () => {
-      if (AppConfig.isElectron && window.electronIO.ipcRenderer) {
-        window.electronIO.ipcRenderer.removeAllListeners('play-pause');
-      }
+      unsubscribePlayPause?.();
       fscreen.removeEventListener('fullscreenchange', handleFullscreenChange);
       fscreen.removeEventListener('fullscreenerror', handleFullscreenError);
     };

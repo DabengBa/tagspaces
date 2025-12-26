@@ -33,6 +33,7 @@ import protocol from './protocol';
 import settings from './settings';
 import { Extensions } from './types';
 import { resolveHtmlPath } from './util';
+import { openExternalSafe } from './safeExternal';
 
 // --- App State ---
 let isMacLike = process.platform === 'darwin';
@@ -97,6 +98,11 @@ const browserWindowOptions: BrowserWindowConstructorOptions = {
   titleBarStyle: isMacLike ? 'hidden' : 'default',
   webPreferences: {
     spellcheck: true,
+    contextIsolation: true,
+    nodeIntegration: false,
+    sandbox: true,
+    webSecurity: true,
+    allowRunningInsecureContent: false,
     preload:
       app.isPackaged || !isDebug
         ? path.join(__dirname, 'preload.js')
@@ -522,7 +528,7 @@ const createWindow = async (i18n: any) => {
 
   // Open urls in the user's browser
   mainWindow.webContents.setWindowOpenHandler((edata) => {
-    shell.openExternal(edata.url);
+    openExternalSafe(edata.url);
     return { action: 'deny' };
   });
 };

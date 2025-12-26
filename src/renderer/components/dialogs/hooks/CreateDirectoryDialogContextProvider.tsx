@@ -64,18 +64,17 @@ export const CreateDirectoryDialogContextProvider = ({
 
   useEffect(() => {
     if (AppConfig.isElectron) {
-      window.electronIO.ipcRenderer.on('show-create-directory-dialog', () => {
-        openDialog(undefined, (dirPath) => {
-          console.log(dirPath);
-        });
-      });
+      const unsubscribe = window.electronIO.ipcRenderer.on(
+        'show-create-directory-dialog',
+        () => {
+          openDialog(undefined, (dirPath) => {
+            console.log(dirPath);
+          });
+        },
+      );
 
       return () => {
-        if (window.electronIO.ipcRenderer) {
-          window.electronIO.ipcRenderer.removeAllListeners(
-            'show-create-directory-dialog',
-          );
-        }
+        unsubscribe();
       };
     }
   }, []);

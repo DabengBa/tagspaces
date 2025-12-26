@@ -229,13 +229,16 @@ export const FSWatcherContextProvider = ({
 
   useEffect(() => {
     if (AppConfig.isElectron) {
-      window.electronIO.ipcRenderer.on('folderChanged', (message: Changed) => {
+      const unsubscribe = window.electronIO.ipcRenderer.on(
+        'folderChanged',
+        (message: Changed) => {
         const { path, eventName } = message;
         folderChanged(eventName, path);
-      });
+        },
+      );
 
       return () => {
-        window.electronIO.ipcRenderer.removeAllListeners('folderChanged');
+        unsubscribe();
       };
     }
   }, [folderChanged]);

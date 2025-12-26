@@ -7,6 +7,7 @@ import {
   nativeImage,
   BrowserWindow,
 } from 'electron';
+import { openExternalSafe } from './safeExternal';
 import {
   getPropertiesPromise,
   listDirectoryPromise,
@@ -531,7 +532,7 @@ export default function loadMainEvents() {
       });
   });
   ipcMain.on('openUrl', async (event, url) => {
-    await shell.openExternal(url);
+    openExternalSafe(url);
   });
   ipcMain.handle('selectDirectoryDialog', async () => {
     const options = {

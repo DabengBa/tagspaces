@@ -53,16 +53,15 @@ export const LinkDialogContextProvider = ({
 
   useEffect(() => {
     if (AppConfig.isElectron) {
-      window.electronIO.ipcRenderer.on('toggle-open-link-dialog', () => {
-        openDialog();
-      });
+      const unsubscribe = window.electronIO.ipcRenderer.on(
+        'toggle-open-link-dialog',
+        () => {
+          openDialog();
+        },
+      );
 
       return () => {
-        if (window.electronIO.ipcRenderer) {
-          window.electronIO.ipcRenderer.removeAllListeners(
-            'toggle-open-link-dialog',
-          );
-        }
+        unsubscribe();
       };
     }
   }, []);

@@ -243,7 +243,7 @@ export const ChatContextProvider = ({ children }: ChatContextProviderProps) => {
   /*
   useEffect(() => {
       //refreshOllamaModels();
-      window.electronIO.ipcRenderer.on(
+      const unsubscribe = window.electronIO.ipcRenderer.on(
         'PullModel',
         (message: PullModelResponse) => {
           //console.log('ChatMessage:' + message);
@@ -264,7 +264,7 @@ export const ChatContextProvider = ({ children }: ChatContextProviderProps) => {
       );
 
       return () => {
-        window.electronIO.ipcRenderer.removeAllListeners('ChatMessage');
+        unsubscribe();
         unloadCurrentModel();
       };
   }, []);*/

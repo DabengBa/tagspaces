@@ -65,13 +65,16 @@ export const ExtensionsContextProvider = ({
 
   useEffect(() => {
     if (AppConfig.isElectron) {
-      window.electronIO.ipcRenderer.on('set_extensions', (arg: Extensions) => {
-        const { extensions, supportedFileTypes } = arg;
-        addExtensions(extensions);
-        dispatch(SettingsActions.addSupportedFileTypes(supportedFileTypes));
-      });
+      const unsubscribe = window.electronIO.ipcRenderer.on(
+        'set_extensions',
+        (arg: Extensions) => {
+          const { extensions, supportedFileTypes } = arg;
+          addExtensions(extensions);
+          dispatch(SettingsActions.addSupportedFileTypes(supportedFileTypes));
+        },
+      );
       return () => {
-        window.electronIO.ipcRenderer.removeAllListeners('set_extensions');
+        unsubscribe();
       };
     }
   }, []);

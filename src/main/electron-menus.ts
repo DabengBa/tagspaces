@@ -16,8 +16,9 @@
  *
  */
 
-import { app, Menu, shell } from 'electron';
+import { app, Menu } from 'electron';
 import Links from '../../assets/links';
+import { openExternalSafe } from './safeExternal';
 
 export default function buildDesktopMenu(props: any, i18n) {
   function quitApp() {
@@ -194,7 +195,7 @@ export default function buildDesktopMenu(props: any, i18n) {
           label: '&' + i18n.t('documentation'),
           accelerator: 'F1',
           click: () => {
-            shell.openExternal(Links.documentationLinks.general);
+            openExternalSafe(Links.documentationLinks.general);
           },
         },
         {
@@ -208,19 +209,19 @@ export default function buildDesktopMenu(props: any, i18n) {
         {
           label: '&' + i18n.t('whatsNew'),
           click: () => {
-            shell.openExternal(Links.links.changelogURL);
+            openExternalSafe(Links.links.changelogURL);
           },
         },
         {
           label: '&' + i18n.t('followOnMastodon'),
           click: () => {
-            shell.openExternal(Links.links.mastodon);
+            openExternalSafe(Links.links.mastodon);
           },
         },
         {
           label: '&' + i18n.t('followOnX'),
           click: () => {
-            shell.openExternal(Links.links.twitter);
+            openExternalSafe(Links.links.twitter);
           },
         },
         {
@@ -229,13 +230,13 @@ export default function buildDesktopMenu(props: any, i18n) {
         {
           label: '&' + i18n.t('suggestNewFeatures'),
           click: () => {
-            shell.openExternal(Links.links.suggestFeature);
+            openExternalSafe(Links.links.suggestFeature);
           },
         },
         {
           label: '&' + i18n.t('reportIssues'),
           click: () => {
-            shell.openExternal(Links.links.reportIssue);
+            openExternalSafe(Links.links.reportIssue);
           },
         },
         {
@@ -244,13 +245,13 @@ export default function buildDesktopMenu(props: any, i18n) {
         {
           label: i18n.t('webClipperChrome'),
           click: () => {
-            shell.openExternal(Links.links.webClipperChrome);
+            openExternalSafe(Links.links.webClipperChrome);
           },
         },
         {
           label: i18n.t('webClipperFirefox'),
           click: () => {
-            shell.openExternal(Links.links.webClipperFirefox);
+            openExternalSafe(Links.links.webClipperFirefox);
           },
         },
         {
@@ -263,7 +264,7 @@ export default function buildDesktopMenu(props: any, i18n) {
         {
           label: i18n.t('cancelSubscription'),
           click: () => {
-            shell.openExternal(Links.links.cancelSubscription);
+            openExternalSafe(Links.links.cancelSubscription);
           },
         },
         {

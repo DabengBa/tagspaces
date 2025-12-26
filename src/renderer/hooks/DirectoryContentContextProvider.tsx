@@ -294,7 +294,7 @@ export const DirectoryContentContextProvider = ({
         console.error('broadcast.onmessage error:', e);
       }
 
-      window.electronIO.ipcRenderer.on('cmd', (arg) => {
+      const unsubscribeCmd = window.electronIO.ipcRenderer.on('cmd', (arg) => {
         if (arg === 'open-search') {
           setSearchQuery({ textQuery: '' });
         } else if (arg === 'exit-fullscreen') {
@@ -315,9 +315,7 @@ export const DirectoryContentContextProvider = ({
       });
 
       return () => {
-        if (window.electronIO.ipcRenderer) {
-          window.electronIO.ipcRenderer.removeAllListeners('cmd');
-        }
+        unsubscribeCmd();
       };
     }
   }, []);
