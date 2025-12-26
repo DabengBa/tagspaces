@@ -51,19 +51,22 @@ export const PerspectiveActionsContextProvider = ({
 
   useEffect(() => {
     if (AppConfig.isElectron) {
-      const unsubscribe = window.electronIO.ipcRenderer.on('perspective', (arg) => {
-        if (arg === 'next-file') {
-          const action: TS.PerspectiveActions = {
-            action: 'openNext',
-          };
-          setActions(action);
-        } else if (arg === 'previous-file') {
-          const action: TS.PerspectiveActions = {
-            action: 'openPrevious',
-          };
-          setActions(action);
-        }
-      });
+      const unsubscribe = window.electronIO.ipcRenderer.on(
+        'perspective',
+        (arg) => {
+          if (arg === 'next-file') {
+            const action: TS.PerspectiveActions = {
+              action: 'openNext',
+            };
+            setActions(action);
+          } else if (arg === 'previous-file') {
+            const action: TS.PerspectiveActions = {
+              action: 'openPrevious',
+            };
+            setActions(action);
+          }
+        },
+      );
 
       return () => {
         unsubscribe();

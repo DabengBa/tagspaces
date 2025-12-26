@@ -232,8 +232,8 @@ export const FSWatcherContextProvider = ({
       const unsubscribe = window.electronIO.ipcRenderer.on(
         'folderChanged',
         (message: Changed) => {
-        const { path, eventName } = message;
-        folderChanged(eventName, path);
+          const { path, eventName } = message;
+          folderChanged(eventName, path);
         },
       );
 

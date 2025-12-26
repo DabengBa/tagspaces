@@ -28,6 +28,12 @@ if (!fs.existsSync(erbNodeModulesPath) && fs.existsSync(appNodeModulesPath)) {
 }
 
 const targetNodeModules = path.join(distPath, 'node_modules');
+
+try {
+  fs.mkdirSync(distPath, { recursive: true });
+} catch (err) {
+  console.error('Error ensuring dist directory:' + distPath, err);
+}
 try {
   if (fs.existsSync(targetNodeModules)) {
     fs.unlinkSync(targetNodeModules);

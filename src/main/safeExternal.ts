@@ -14,4 +14,3 @@ export function openExternalSafe(rawUrl: string): void {
     console.warn('Blocked invalid external URL:', rawUrl);
   }
 }
-
