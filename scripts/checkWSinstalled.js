@@ -6,16 +6,30 @@ const fs = require('fs-extra');
 const childProcess = require('child_process');
 const packageJson = require('../release/app/package.json');
 
+function run(cmd) {
+  return childProcess.execSync(cmd, {
+    stdio: ['ignore', 'pipe', 'pipe'],
+    maxBuffer: 64 * 1024 * 1024,
+  });
+}
+
+function runWithEnv(cmd, env) {
+  return childProcess.execSync(cmd, {
+    stdio: ['ignore', 'pipe', 'pipe'],
+    maxBuffer: 64 * 1024 * 1024,
+    env: { ...process.env, ...env },
+  });
+}
+
 function isInstalled(packageName, checkVersion = undefined) {
   try {
     const packageVersions =
       packageName + (checkVersion ? '@' + checkVersion : '');
-    const versions = childProcess
-      .execSync(
-        'npm list --depth=0 --prefix ' + path.join(__dirname, '../release/app'),
-      )
-      //.execSync('npm view ' + packageName + ' version')
-      .toString();
+    const versions = run(
+      'npm list --depth=0 --prefix "' +
+        path.join(__dirname, '../release/app') +
+        '"',
+    ).toString();
     if (versions.indexOf(packageVersions) > 0) {
       return true;
     }
@@ -98,7 +112,20 @@ if (platform === 'node') {
   }
 }
 if (installCmd) {
-  console.log(childProcess.execSync(installCmd).toString());
+  const npmCacheTmp =
+    process.env.TAGSPACES_NPM_TMP || path.join(__dirname, '..', '.tmp', 'npm');
+  try {
+    fs.ensureDirSync(npmCacheTmp);
+  } catch (e) {
+    // best-effort; fallback to default npm tmp behavior
+  }
+
+  console.log(
+    runWithEnv(installCmd, {
+      npm_config_tmp: npmCacheTmp,
+      npm_config_cache: path.join(npmCacheTmp, 'cache'),
+    }).toString(),
+  );
   /*if (shell.exec(installCmd).code !== 0) {
     shell.echo(
       'Error: Install ' + process.env.PD_PLATFORM + ' platform failed'

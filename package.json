@@ -56,7 +56,7 @@
     "generate-jwt": "node scripts/jwt_generate.js",
     "postinstall": "npx rimraf node_modules/canvas && ts-node .erb/scripts/check-native-dep.js && electron-builder install-app-deps && npm run prepare-node && node -r ts-node/register ./.erb/scripts/link-modules.ts && npm run build:dll",
     "clean-pro-ext": "echo \"removed: pro deps\" && exit 0",
-    "install-ext-node": "rimraf release/app/node_modules && cd ./release/app && npm install && cd ../.. && npm run generate-extensions",
+    "install-ext-node": "npx rimraf release/app/node_modules && npm --prefix ./release/app install --ignore-scripts && npm run generate-extensions",
     "install-ext-node-check": "npx cross-env PD_PLATFORM=node node scripts/checkWSinstalled.js",
     "install-ext-node-win": "rimraf release/app/node_modules && npm install --prefix ./release/app --platform=win32 --arch=x64",
     "install-ext-node-linux": "rimraf release/app/node_modules && npm install --prefix ./release/app --platform=linux --arch=x64",
@@ -106,7 +106,7 @@
     "prepare": "husky install",
     "prepare-cordova": "npm run install-ext-web-check && npm run postinstall-cordova-check && rimraf cordova/www/dist && rimraf cordova/www/node_modules && shx cp -rL release/app/node_modules cordova/www && shx cp LICENSE.txt cordova/www",
     "prepare-cordova-pro": "echo \"removed: pro cordova not supported\" && exit 1",
-    "prepare-node": "npm run install-ext-node-check && npm run postinstall-electron-check",
+    "prepare-node": "npm run install-ext-node-check && npm run postinstall-node-check && npm run postinstall-electron-check",
     "copy-web": "npm run install-ext-web-check && npm run postinstall-aws-check && rimraf web/modules && shx mkdir -p web/modules/@tagspaces/extensions && shx cp -rL release/app/node_modules/@tagspaces/extensions/* web/modules/@tagspaces/extensions/",
     "prepare-web": "npm run copy-web && shx cp LICENSE.txt web && npm run build:web && node scripts/genswconf.js && npm run clean-maps",
     "copy-web-pro": "echo \"removed: pro web copy not supported\" && exit 1",
@@ -344,7 +344,7 @@
   },
   "engines": {
     "npm": ">= 6.14.15",
-    "node": ">=18.0.0 <23.0.0",
+    "node": "24.12.0",
     "yarn": "please-use-npm"
   },
   "electronmon": {

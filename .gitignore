@@ -93,6 +93,9 @@ extconfig*
 
 reports/*
 
+.tmp/
+dist-renderer.stats.json
+
 coverage/
 tests/*
 !tests/unit/

@@ -22,7 +22,7 @@
     "@tagspaces/tagspaces-common-node": "4.5.105",
     "@tagspaces/tagspaces-ws": "4.5.105",
     "sharp": "0.32.6",
+    "tagspaces": "file:../..",
     "ws": "8.18.1"
-  },
-  "optionalDependencies": {}
+  }
 }
