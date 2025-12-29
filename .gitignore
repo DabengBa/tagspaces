@@ -6,8 +6,6 @@ logs
 pids
 *.pid
 *.seed
-
-
 # node-waf configuration
 .lock-wscript
 
@@ -137,3 +135,14 @@ tx
 
 tagspsacespro
 third-party
+
+# Kiro
+.kiro/
+
+# Vite build artifacts
+.vite/
+dist-ssr/
+*.local
+
+# Rust / Tauri build artifacts
+src-tauri/target/
